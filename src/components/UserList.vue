@@ -1,7 +1,7 @@
 <template>
   <v-col justify="center">
     <v-data-table
-      v-if="true"
+      v-if="!isLoading && users.length"
       :headers="headers"
       :items="users"
       sort-by="name"
@@ -10,9 +10,15 @@
       <template
         v-slot:item.name="{ item }"
       >
-        <router-link :to="{ path: 'user', query: { id: item.id }}">
+        <router-link :to="{ path: 'user/' + item._id, params: { id: item._id }}">
           {{ item.name }}
         </router-link>
+      </template>
+
+      <template
+        v-slot:item.phone="{ item }"
+      >
+        {{ '+' + item.phone }}
       </template>
 
       <template
@@ -21,7 +27,7 @@
         <v-avatar size="36">
           <img
             :src="item.img"
-            alt="John"
+            alt="AVATAR"
           >
         </v-avatar>
       </template>
@@ -33,7 +39,7 @@
     </v-data-table>
 
     <v-row
-      v-else-if="isNoteLoad = false"
+      v-else-if="isLoading"
       justify="center"
       class="mt-10"
     >
@@ -59,14 +65,22 @@
 import DayJs from 'dayjs';
 
 export default {
+  props: {
+    users: {
+      type: Array,
+      default: () => {},
+    },
+    isLoading: {
+      type: Boolean,
+      default: () => true,
+    },
+  },
   data() {
     return {
-      isNoteLoad: true,
       headers: [
         { text: '', value: 'img', sortable: false },
         {
           text: 'Name',
-          align: 'start',
           value: 'name',
         },
         { text: 'Phone', value: 'phone', sortable: false },
@@ -75,24 +89,6 @@ export default {
       ],
     };
   },
-  computed: {
-    users() {
-      return [{
-        name: 'Катя',
-        phone: '71112223344',
-        email: 'katusha@email.ru',
-        birth: '878850000000',
-        img: 'https://avatarko.ru/img/avatar/15/kot_Minecraft_Endermen_pechene_14559.jpg',
-      },
-      {
-        name: 'Саша',
-        phone: '72223334455',
-        email: 'sasha@email.ru',
-        birth: '902865600000',
-        img: 'https://avatarko.ru/img/avatar/11/zhivotnye_ptica_popugaj_10183.jpg',
-      }];
-    },
-  },
   methods: {
     parseDate(timestamp) {
       return DayJs.unix(timestamp / 1000).format('MM/DD/YYYY');
@@ -100,7 +96,3 @@ export default {
   },
 };
 </script>
-
-<style>
-
-</style>

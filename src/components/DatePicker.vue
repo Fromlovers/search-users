@@ -8,7 +8,7 @@
   >
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
-        v-model="dateFormatted"
+        :value="dateFormatted"
         persistent-hint
         prepend-icon="mdi-calendar"
         v-bind="attrs"
@@ -18,6 +18,7 @@
         full-width
         @blur="date = parseDate(dateFormatted)"
         v-on="on"
+        @keydown="(ev) => ev.preventDefault()"
       />
     </template>
 
@@ -31,10 +32,15 @@
 
 <script>
 export default {
+  props: {
+    dateFormatted: {
+      type: String,
+      default: () => '',
+    },
+  },
   data() {
     return {
       date: new Date().toISOString().substr(0, 10),
-      dateFormatted: '',
       menu: false,
     };
   },
@@ -44,11 +50,8 @@ export default {
     },
   },
   watch: {
-    date: {
-      handler() {
-        this.dateFormatted = this.formatDate(this.date);
-        this.$emit('change', this.dateFormatted);
-      },
+    date() {
+      this.$emit('change', this.formatDate(this.date));
     },
   },
   methods: {
@@ -71,7 +74,3 @@ export default {
   },
 };
 </script>
-
-<style>
-
-</style>

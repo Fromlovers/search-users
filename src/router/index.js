@@ -6,7 +6,6 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: 'main',
     component: () => import(/* webpackChunkName: "Users" */ '../layouts/Main.vue'),
     children: [
       {
