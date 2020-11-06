@@ -6,22 +6,26 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "express": "vue-cli-service express:watch",
-    "express:run": "vue-cli-service express:run"
+    "express": "vue-cli-service express:watch --port=8000",
+    "express:run": "vue-cli-service express:run --port=8000"
   },
   "dependencies": {
-    "@vue/eslint-config-airbnb": "^5.1.0",
     "core-js": "^3.6.5",
+    "cors": "^2.8.5",
     "dayjs": "^1.9.4",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.2",
     "vue": "^2.6.11",
     "vue-router": "^3.4.8",
     "vuetify": "^2.2.11",
     "vuex": "^3.5.1"
   },
   "devDependencies": {
+    "@vue/cli-service": "~4.5.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/eslint-config-airbnb": "^5.1.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
