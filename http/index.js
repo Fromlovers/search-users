@@ -1,24 +1,42 @@
-import express from 'express';
-// import socketIO from "socket.io";
+import cors from 'cors';
+import User from './models/User';
+import Client from './db/index';
 
-export default (app, http) => {
-  // app.use(express.json());
-  //
-  // app.get('/foo', (req, res) => {
-  //   res.json({msg: 'foo'});
-  // });
-  //
-  // app.post('/bar', (req, res) => {
-  //   res.json(req.body);
-  // });
-  // 
-  // optional support for socket.io
-  // 
-  // let io = socketIO(http);
-  // io.on("connection", client => {
-  //   client.on("message", function(data) {
-  //     // do something
-  //   });
-  //   client.emit("message", "Welcome");
-  // });
-}
+const uri = process.env.URI;
+const databaseName = process.env.DATABASE;
+
+let database = null;
+
+export default async (app) => {
+  app.use(cors());
+
+  if (!database) {
+    try {
+      const client = new Client(uri, databaseName);
+      await client.connectToDatabase();
+      database = client.getDatabase();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  app.get('/users', async (req, res) => {
+    if (!User.validate(req.query)) {
+      res.status(400).json({ error: 'Bad Request' });
+      return;
+    }
+
+    const user = new User(database);
+    res.json({ ...await user.get(req.query) });
+  });
+
+  app.get('/user', async (req, res) => {
+    if (!User.validate(req.query)) {
+      res.status(400).json({ error: 'Bad Request' });
+      return;
+    }
+
+    const user = new User(database);
+    res.json({ ...await user.getOne(req.query) });
+  });
+};
