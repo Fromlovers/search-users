@@ -56,6 +56,11 @@ export default {
         // eslint-disable-next-line no-param-reassign
         params.name = params.name.replace(/\s+/g, '');
       }
+
+      if (Object.prototype.hasOwnProperty.call(params, 'email')) {
+        // eslint-disable-next-line no-param-reassign
+        params.email = params.email.replace(/\s+/g, '');
+      }
     },
   },
 };
